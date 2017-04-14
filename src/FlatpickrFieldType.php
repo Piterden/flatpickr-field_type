@@ -56,7 +56,7 @@ class FlatpickrFieldType extends FieldType
      * @var array
      */
     protected $config = [
-        'mode'        => 'datetime',
+        'mode'        => 'single',
         'date_format' => null,
         'time_format' => null,
         'timezone'    => null,
