@@ -14,13 +14,10 @@ $(document).on('ajaxComplete ready', function () {
                 case '':
                     return false;
                 case '1':
-                    if (key === 'hourIncrement') {
-                        return 1;
+                    if (key.endsWith('Increment')) {
+                        return Number(value);
                     }
                     return true;
-                }
-                if (key === 'appendTo') {
-                    return $input.closest('.form-group')[0];
                 }
                 return value;
             };
@@ -33,10 +30,6 @@ $(document).on('ajaxComplete ready', function () {
                 }
             }
 
-            console.log(dataSet);
-
-            flatpickr('input[data-provides="defr.field_type.flatpickr"]:not([data-initialized])', dataSet);
-
-            $input.attr('data-initialized', '');
+            $input.attr('data-initialized', '').flatpickr(dataSet);
         });
 });

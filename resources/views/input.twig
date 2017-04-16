@@ -16,14 +16,14 @@
         data-mode="single"
         data-date-format="{{ field_type.getDatetimeFormat() }}"
         data-alt-format="{{ field_type.config.alt_format }}"
+        data-alt-input="{{ field_type.config.alt_input }}"
+        data-allow-input="{{ field_type.config.allow_input }}"
         data-enable-time="{{ field_type.getEnableTime() }}"
         data-no-calendar="{{ field_type.getNoCalendar() }}"
         data-shorthand-current-month="{{ field_type.config.shorthand_current_month }}"
         data-time24hr="{{ field_type.config.time24hr }}"
         data-hour-increment="{{ field_type.config.hour_increment }}"
-        data-allow-input="{{ field_type.config.allow_input }}"
-        data-alt-input="{{ field_type.config.alt_input }}"
-        data-timezone="{{ field_type.config.timezone }}"
+        data-minute-increment="{{ field_type.config.minute_increment }}"
         {{ html_attributes(field_type.attributes) }}
         {{ field_type.required ? 'required' }}
         {{ field_type.disabled ? 'disabled' }}

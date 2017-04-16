@@ -91,12 +91,12 @@ return [
             'default_value' => 15,
         ],
     ],
-    'allow_input'             => [
-        'type'   => 'anomaly.field_type.boolean',
-        'config' => [
-            'default_value' => false,
-        ],
-    ],
+    // 'allow_input'             => [
+    //     'type'   => 'anomaly.field_type.boolean',
+    //     'config' => [
+    //         'default_value' => false,
+    //     ],
+    // ],
     'timezone'                => [
         'type'   => 'anomaly.field_type.select',
         'config' => [
