@@ -1,16 +1,16 @@
-<?php namespace Anomaly\DatetimeFieldType;
+<?php namespace Defr\FlatpickrFieldType;
 
 use Anomaly\Streams\Platform\Addon\FieldType\FieldTypePresenter;
 use Carbon\Carbon;
 
 /**
- * Class DatetimeFieldTypePresenter
+ * Class FlatpickrFieldTypePresenter
  *
  * @link          http://pyrocms.com/
  * @author        PyroCMS, Inc. <support@pyrocms.com>
  * @author        Ryan Thompson <ryan@pyrocms.com>
  */
-class DatetimeFieldTypePresenter extends FieldTypePresenter
+class FlatpickrFieldTypePresenter extends FieldTypePresenter
 {
 
     /**

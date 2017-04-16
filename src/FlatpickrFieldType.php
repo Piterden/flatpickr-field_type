@@ -1,22 +1,22 @@
 <?php namespace Defr\FlatpickrFieldType;
 
-use Defr\FlatpickrFieldType\Validation\ValidateDatetime;
 use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
+use Defr\FlatpickrFieldType\Validation\ValidateDatetime;
 use Illuminate\Config\Repository;
 
 /**
  * Class FlatpickrFieldType
  *
- * @link   http://pyrocms.com/
  * @author PyroCMS, Inc. <support@pyrocms.com>
  * @author Ryan Thompson <ryan@pyrocms.com>
+ *
+ * @link   http://pyrocms.com/
  */
 class FlatpickrFieldType extends FieldType
 {
 
     /**
-     * The database column type. Depending on the
-     * mode this will be datetime, or array.
+     * The database column type.
      *
      * @var string
      */
@@ -56,7 +56,7 @@ class FlatpickrFieldType extends FieldType
      * @var array
      */
     protected $config = [
-        'mode'        => 'single',
+        'mode'        => 'datetime',
         'date_format' => null,
         'time_format' => null,
         'timezone'    => null,
@@ -71,21 +71,12 @@ class FlatpickrFieldType extends FieldType
     protected $configuration;
 
     /**
-     * The converter utility.
-     *
-     * @var DatetimeConverter
-     */
-    protected $converter;
-
-    /**
      * Create a new FlatpickrFieldType instance.
      *
-     * @param DatetimeConverter $converter
-     * @param Repository        $configuration
+     * @param Repository $configuration
      */
-    public function __construct(DatetimeConverter $converter, Repository $configuration)
+    public function __construct(Repository $configuration)
     {
-        $this->converter     = $converter;
         $this->configuration = $configuration;
     }
 
@@ -99,32 +90,29 @@ class FlatpickrFieldType extends FieldType
         $config = parent::getConfig();
 
         $timezones = array_map(
-            function ($timezone) {
+            function ($timezone)
+            {
                 return strtolower($timezone);
             },
             timezone_identifiers_list()
         );
 
-        $formats = $this->configuration->get('defr.field_type.flatpickr::formats.date');
-
         // Check for default / erroneous timezone.
-        if ((!$timezone = strtolower(array_get($config, 'timezone'))) || !in_array($timezone, $timezones)) {
+        if ((!$timezone = strtolower(array_get($config, 'timezone'))) || !in_array($timezone, $timezones))
+        {
             $config['timezone'] = $this->configuration->get('app.timezone');
         }
 
         // Default date format.
-        if (!$config['date_format']) {
+        if (!$config['date_format'])
+        {
             $config['date_format'] = $this->configuration->get('streams::datetime.date_format');
         }
 
         // Default time format.
-        if (!$config['time_format']) {
+        if (!$config['time_format'])
+        {
             $config['time_format'] = $this->configuration->get('streams::datetime.time_format');
-        }
-
-        // Make sure format is supported.
-        if (!in_array($config['date_format'], array_keys($formats))) {
-            $config['date_format'] = array_first(array_keys($formats));
         }
 
         return $config;
@@ -141,17 +129,6 @@ class FlatpickrFieldType extends FieldType
     }
 
     /**
-     * Get the date format
-     * for the plugin.
-     *
-     * @return string
-     */
-    public function getPluginFormat()
-    {
-        return $this->converter->toJs($this->getDatetimeFormat());
-    }
-
-    /**
      * Get the post format.
      *
      * @return string
@@ -162,8 +139,9 @@ class FlatpickrFieldType extends FieldType
         $date = array_get($this->getConfig(), 'date_format');
         $time = array_get($this->getConfig(), 'time_format');
 
-        if ($mode === 'datetime') {
-            return $date . ' ' . $time;
+        if ($mode === 'datetime')
+        {
+            return $date.' '.$time;
         }
 
         return $mode === 'date' ? $date : $time;
@@ -172,12 +150,13 @@ class FlatpickrFieldType extends FieldType
     /**
      * Get the storage format.
      *
-     * @return string
      * @throws \Exception
+     * @return string
      */
     public function getStorageFormat()
     {
-        switch ($this->getColumnType()) {
+        switch ($this->getColumnType())
+        {
             case 'datetime':
                 return 'Y-m-d H:i:s';
             case 'date':
@@ -192,22 +171,23 @@ class FlatpickrFieldType extends FieldType
     /**
      * Get the output format.
      *
-     * @param  null $output
+     * @param  null     $output
      * @return string
      */
     public function getOutputFormat($output = null)
     {
-        switch ($output ?: $this->getColumnType()) {
+        switch ($output ?: $this->getColumnType())
+        {
             case 'datetime':
                 return array_get(
-                        $this->getConfig(),
-                        'date_format',
-                        config('streams::datetime.date_format')
-                    ) . ' ' . array_get(
-                        $this->getConfig(),
-                        'time_format',
-                        config('streams::datetime.time_format')
-                    );
+                    $this->getConfig(),
+                    'date_format',
+                    config('streams::datetime.date_format')
+                ).' '.array_get(
+                    $this->getConfig(),
+                    'time_format',
+                    config('streams::datetime.time_format')
+                );
             case 'date':
                 return array_get($this->getConfig(), 'date_format', config('streams::datetime.date_format'));
             case 'time':
@@ -215,5 +195,25 @@ class FlatpickrFieldType extends FieldType
         }
 
         return null;
+    }
+
+    /**
+     * Gets no calendar.
+     *
+     * @return boolean No calendar.
+     */
+    public function getNoCalendar()
+    {
+        return $this->getColumnType() == 'time';
+    }
+
+    /**
+     * Gets no calendar.
+     *
+     * @return boolean No calendar.
+     */
+    public function getEnableTime()
+    {
+        return $this->getColumnType() != 'date';
     }
 }

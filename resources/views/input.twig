@@ -1,19 +1,29 @@
-{{ asset_add('theme.css', 'defr.field_type.ftatpickr::css/flatpickr.min.css') }}
-{{ asset_add('theme.css', 'defr.field_type.ftatpickr::css/base16_flat.css') }}
-{{ asset_add('scripts.js', 'defr.field_type.ftatpickr::js/flatpickr.min.js') }}
-{{ asset_add('scripts.js', 'defr.field_type.ftatpickr::js/input.js') }}
+{{ asset_add('styles.css', 'defr.field_type.flatpickr::css/flatpickr.css') }}
+{{ asset_add('styles.css', 'defr.field_type.flatpickr::css/themes/' ~ field_type.config.theme ~ '.css') }}
+{{ asset_add('scripts.js', 'defr.field_type.flatpickr::js/flatpickr.js') }}
+{{ asset_add('scripts.js', 'defr.field_type.flatpickr::js/input.js') }}
 
 <div class="input-group">
 
+    {# {{ dd(field_type) }} #}
+
     <input
-        data-input
         type="text"
         class="form-control"
         name="{{ field_type.input_name }}"
-        data-step="{{ field_type.config.step }}"
-        value="{{ field_type.format(field_type.datetime_format) }}"
+        value="{{ field_type.format() }}"
         placeholder="{{ 'now'|date(field_type.datetime_format) }}"
-        data-datetime-format="{{ field_type.plugin_format }}"
+        data-mode="single"
+        data-date-format="{{ field_type.getDatetimeFormat() }}"
+        data-alt-format="{{ field_type.config.alt_format }}"
+        data-enable-time="{{ field_type.getEnableTime() }}"
+        data-no-calendar="{{ field_type.getNoCalendar() }}"
+        data-shorthand-current-month="{{ field_type.config.shorthand_current_month }}"
+        data-time24hr="{{ field_type.config.time24hr }}"
+        data-hour-increment="{{ field_type.config.hour_increment }}"
+        data-allow-input="{{ field_type.config.allow_input }}"
+        data-alt-input="{{ field_type.config.alt_input }}"
+        data-timezone="{{ field_type.config.timezone }}"
         {{ html_attributes(field_type.attributes) }}
         {{ field_type.required ? 'required' }}
         {{ field_type.disabled ? 'disabled' }}
