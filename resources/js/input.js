@@ -5,31 +5,40 @@ $(document).on('ajaxComplete ready', function () {
         .each(function () {
 
             var $input = $(this);
-            var dataSet = {};
             var data = this.dataset;
+            var dataSet = {};
             var value;
-            var excludes = ['field', 'field_name', 'provides', 'timezone'];
-            var mutateValue = function (value, key = null) {
-                switch (value) {
-                case '':
-                    return false;
-                case '1':
-                    if (key.endsWith('Increment')) {
-                        return Number(value);
-                    }
-                    return true;
+
+            var mutateValue = function (value, key) {
+                if (key.endsWith('Increment')) {
+                    return Number(value);
+                }
+                if (['', '0', '1'].includes(value)) {
+                    return Boolean(Number(value));
                 }
                 return value;
             };
 
+            var updateInput = function (selectedDates, dateStr) {
+                $input.val(dateStr);
+            };
+
             for (var key in data) {
-                if (data.hasOwnProperty(key) && !excludes.includes(key)) {
+                if (data.hasOwnProperty(key)) {
                     value = mutateValue(data[key], key);
 
                     dataSet[key] = value;
                 }
             }
 
-            $input.attr('data-initialized', '').flatpickr(dataSet);
+            dataSet['onReady'] = function (selectedDates, dateStr, instance) {
+                instance.setDate($input.val(), true);
+                $input.attr('data-initialized', 'data-initialized');
+            };
+
+            dataSet['onChange'] = updateInput;
+            dataSet['onClose'] = updateInput;
+
+            $input.siblings('input[type="text"]').flatpickr(dataSet);
         });
 });

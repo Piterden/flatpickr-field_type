@@ -60,7 +60,6 @@ class FlatpickrFieldType extends FieldType
         'date_format' => null,
         'time_format' => null,
         'timezone'    => null,
-        'step'        => 1,
     ];
 
     /**
@@ -129,6 +128,36 @@ class FlatpickrFieldType extends FieldType
     }
 
     /**
+     * Gets the date format.
+     *
+     * @return string The date format.
+     */
+    public function getDateFormat($default = null)
+    {
+        return array_get($this->getConfig(), 'date_format', $default);
+    }
+
+    /**
+     * Gets the date format.
+     *
+     * @return string The date format.
+     */
+    public function getAltFormat($default = null)
+    {
+        return array_get($this->getConfig(), 'alt_format', $default);
+    }
+
+    /**
+     * Gets the date format.
+     *
+     * @return string The date format.
+     */
+    public function getTimeFormat($default = null)
+    {
+        return array_get($this->getConfig(), 'time_format', $default);
+    }
+
+    /**
      * Get the post format.
      *
      * @return string
@@ -136,8 +165,8 @@ class FlatpickrFieldType extends FieldType
     public function getDatetimeFormat()
     {
         $mode = array_get($this->getConfig(), 'mode');
-        $date = array_get($this->getConfig(), 'date_format');
-        $time = array_get($this->getConfig(), 'time_format');
+        $date = $this->getDateFormat();
+        $time = $this->getTimeFormat();
 
         if ($mode === 'datetime')
         {
@@ -158,11 +187,11 @@ class FlatpickrFieldType extends FieldType
         switch ($this->getColumnType())
         {
             case 'datetime':
-                return 'Y-m-d H:i:s';
+                return 'Y-m-d H:i:S';
             case 'date':
                 return 'Y-m-d';
             case 'time':
-                return 'H:i:s';
+                return 'H:i:S';
         }
 
         throw new \Exception('Storage format can not be determined.');
@@ -176,25 +205,27 @@ class FlatpickrFieldType extends FieldType
      */
     public function getOutputFormat($output = null)
     {
-        switch ($output ?: $this->getColumnType())
+        switch ($this->getColumnType())
         {
             case 'datetime':
-                return array_get(
-                    $this->getConfig(),
-                    'date_format',
-                    config('streams::datetime.date_format')
-                ).' '.array_get(
-                    $this->getConfig(),
-                    'time_format',
-                    config('streams::datetime.time_format')
-                );
+                return 'H:i, F j, Y';
             case 'date':
-                return array_get($this->getConfig(), 'date_format', config('streams::datetime.date_format'));
+                return 'F j, Y';
             case 'time':
-                return array_get($this->getConfig(), 'time_format', config('streams::datetime.time_format'));
+                return 'H:i';
         }
 
         return null;
+    }
+
+    /**
+     * Gets the 24 hours flag.
+     *
+     * @return boolean The 24 hours.
+     */
+    public function get24Hours()
+    {
+        return str_contains($this->getStorageFormat(), 'H');
     }
 
     /**

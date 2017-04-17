@@ -1,5 +1,5 @@
 {{ asset_add('styles.css', 'defr.field_type.flatpickr::css/flatpickr.css') }}
-{{ asset_add('styles.css', 'defr.field_type.flatpickr::css/themes/' ~ field_type.config.theme ~ '.css') }}
+{{ asset_add('styles.css', 'defr.field_type.flatpickr::css/themes/' ~ field_type.config.theme|default('airbnb') ~ '.css') }}
 {{ asset_add('scripts.js', 'defr.field_type.flatpickr::js/flatpickr.js') }}
 {{ asset_add('scripts.js', 'defr.field_type.flatpickr::js/input.js') }}
 
@@ -8,27 +8,28 @@
     {# {{ dd(field_type) }} #}
 
     <input
-        type="text"
-        class="form-control"
-        name="{{ field_type.input_name }}"
-        value="{{ field_type.format() }}"
-        placeholder="{{ 'now'|date(field_type.datetime_format) }}"
+        type="hidden"
         data-mode="single"
-        data-date-format="{{ field_type.getDatetimeFormat() }}"
-        data-alt-format="{{ field_type.config.alt_format }}"
-        data-alt-input="{{ field_type.config.alt_input }}"
-        data-allow-input="{{ field_type.config.allow_input }}"
-        data-enable-time="{{ field_type.getEnableTime() }}"
-        data-no-calendar="{{ field_type.getNoCalendar() }}"
-        data-shorthand-current-month="{{ field_type.config.shorthand_current_month }}"
-        data-time24hr="{{ field_type.config.time24hr }}"
-        data-hour-increment="{{ field_type.config.hour_increment }}"
-        data-minute-increment="{{ field_type.config.minute_increment }}"
+        data-date-format="{{ field_type.getStorageFormat() }}"
+        data-alt-format="{{ field_type.getOutputFormat()|default('F j, Y') }}"
+        data-alt-input="{{ field_type.config.alt_input|default('1') }}"
+        data-allow-input="{{ field_type.config.allow_input|default('0') }}"
+        data-enable-time="{{ field_type.getEnableTime()|default('0') }}"
+        data-no-calendar="{{ field_type.getNoCalendar()|default('0') }}"
+        data-shorthand-current-month="{{ field_type.config.shorthand_current_month|default('0') }}"
+        data-time_24hr="{{ field_type.get24Hours()|default('1') }}"
+        data-hour-increment="{{ field_type.config.hour_increment|default('1') }}"
+        data-minute-increment="{{ field_type.config.minute_increment|default('15') }}"
+        value="{{ field_type.value }}"
+        name="{{ field_type.input_name }}"
+        placeholder="{{ 'now'|date(field_type.datetime_format) }}"
         {{ html_attributes(field_type.attributes) }}
         {{ field_type.required ? 'required' }}
         {{ field_type.disabled ? 'disabled' }}
         {{ field_type.readonly ? 'readonly' }}
     >
+
+    <input type="text" class="form-control">
 
     {% if field_type.config.mode != 'date' %}
         <span class="input-group-addon">

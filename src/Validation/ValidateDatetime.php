@@ -27,10 +27,7 @@ class ValidateDatetime
         $fieldType = $builder->getFormFieldFromAttribute($attribute);
 
         try {
-            (new Carbon())->createFromFormat(
-                $fieldType->getDatetimeFormat(),
-                $value
-            );
+            new Carbon($value);
         }
         catch (\Exception $e)
         {

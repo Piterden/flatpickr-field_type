@@ -36,6 +36,19 @@ return [
             },
         ],
     ],
+    'alt_input'               => [
+        'type'   => 'anomaly.field_type.boolean',
+        'config' => [
+            'default_value' => true,
+        ],
+    ],
+    'alt_format'              => [
+        'type'     => 'anomaly.field_type.text',
+        'required' => true,
+        'config'   => [
+            'default_value' => 'F j, Y',
+        ],
+    ],
     'time_format'             => [
         'type'     => 'anomaly.field_type.text',
         'required' => true,
@@ -50,29 +63,10 @@ return [
             'default_value' => 'Y-m-d',
         ],
     ],
-    'alt_input'               => [
-        'type'   => 'anomaly.field_type.boolean',
-        'config' => [
-            'default_value' => true,
-        ],
-    ],
-    'alt_format'              => [
-        'type'     => 'anomaly.field_type.text',
-        'required' => true,
-        'config'   => [
-            'default_value' => 'F j, Y',
-        ],
-    ],
     'shorthand_current_month' => [
         'type'   => 'anomaly.field_type.boolean',
         'config' => [
             'default_value' => false,
-        ],
-    ],
-    'time24hr'                => [
-        'type'   => 'anomaly.field_type.boolean',
-        'config' => [
-            'default_value' => true,
         ],
     ],
     'hour_increment'          => [
@@ -91,17 +85,14 @@ return [
             'default_value' => 15,
         ],
     ],
-    // 'allow_input'             => [
-    //     'type'   => 'anomaly.field_type.boolean',
-    //     'config' => [
-    //         'default_value' => false,
-    //     ],
-    // ],
     'timezone'                => [
         'type'   => 'anomaly.field_type.select',
         'config' => [
             'mode'    => 'search',
             'handler' => 'timezones',
+            'default_value' => function () {
+                return config('app.timezone');
+            },
         ],
     ],
 ];
