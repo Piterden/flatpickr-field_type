@@ -1,6 +1,15 @@
 {
     "name": "defr/flatpickr-field_type",
     "type": "streams-addon",
+    "description": "Streams-platform addon date and time picker.",
+    "keywords": ["laravel", "pyrocms", "streams-platform", "field-type", "date", "datetime", "time", "ui"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Denis Efremov",
+            "email": "efremov.a.denis@gmail.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Defr\\FlatpickrFieldType\\": "src/"
